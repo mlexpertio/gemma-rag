@@ -1,0 +1,21 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "provider": {
+      "llama.cpp": {
+        "npm": "@ai-sdk/openai-compatible",
+        "name": "llama-server (local)",
+        "options": {
+          "baseURL": "http://127.0.0.1:8080/v1"
+        },
+        "models": {
+          "ggml-org/gemma-4-26B-A4B-it-GGUF:Q4_K_M": {
+            "name": "Gemma-4-26B-A4B-it (local)",
+            "limit": {
+              "context": 256000,
+              "output": 65536
+            }
+          }
+        }
+      }
+    }
+  }
