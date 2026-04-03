@@ -117,6 +117,7 @@ if prompt := st.chat_input("Ask something about your selected papers..."):
     # Prepare RAG
     if not selected_papers:
         response_text = "⚠️ Please select at least one paper from the sidebar to chat."
+        retrieved_chunks = []
     else:
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
@@ -125,10 +126,14 @@ if prompt := st.chat_input("Ask something about your selected papers..."):
                         model_name=st.session_state.current_model,
                         persist_dir=VECTOR_STORE_DIR,
                     )
-                    response_text = engine.answer_question(prompt, selected_papers)
+                    response_text, retrieved_chunks = engine.answer_question(
+                        prompt, selected_papers
+                    )
                 except Exception as e:
                     response_text = f"❌ Error: {str(e)}"
+                    retrieved_chunks = []
             st.markdown(response_text)
-
-    # Add assistant response to history
-    st.session_state.messages.append({"role": "assistant", "content": response_text})
+            if retrieved_chunks:
+                with st.expander("View Retrieved Chunks"):
+                    for i, chunk in enumerate(retrieved_chunks):
+                        st.info(f"**Chunk {i + 1}**\n\n{chunk}")

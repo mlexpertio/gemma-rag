@@ -1,6 +1,7 @@
 import os
-from langchain_ollama import OllamaEmbeddings
+
 from langchain_community.vectorstores import Chroma
+from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
@@ -16,7 +17,7 @@ class VectorStoreManager:
 
         documents = []
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000, chunk_overlap=100
+            chunk_size=1500, chunk_overlap=200
         )
 
         for file_path in md_files:
@@ -39,7 +40,7 @@ class VectorStoreManager:
                 persist_directory=self.persist_dir, embedding_function=self.embeddings
             )
 
-    def get_retriever(self, k: int = 4):
+    def get_retriever(self, k: int = 8):
         if self.vector_store is None:
             # Try to load from disk if not in memory
             if os.path.exists(self.persist_dir):
